@@ -9,14 +9,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans flex flex-col min-h-screen">
-
+<body class="bg-gray-100 font-sans flex flex-col min-h-screen  opacity-100" style="background-image: url('back.jpg'); background-size: cover; background-position: center;">
 <!-- Navbar -->
-<nav class="bg-blue-500 p-4 text-white">
-    <div class="container mx-auto">
+
+<nav class="bg-blue-500 p-2 text-white mb-10">
+    <div class="container mx-auto flex justify-between items-center">
         <span class="text-xl font-bold">DataWare </span>
+        <button onclick="logout()" class="ml-auto px-4 py-2 bg-blue-700 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Déconnexion</button>
     </div>
 </nav>
+
+
 
 <!-- Main Container -->
 <div class="flex flex-1">
@@ -64,6 +67,17 @@
 
  
 
+
+    <script>
+    function confirmDelete(projectId) {
+        var confirmation = confirm("Are you sure you want to delete this project?");
+        if (confirmation) {
+            // User confirmed, trigger the deletion by redirecting to a PHP script
+            window.location.href = "delete_projet.php?id=" + projectId;
+        }
+    }
+</script>
+
 <script>
     function loadContent(page) {
         // Fetch the content of the selected page
@@ -78,6 +92,7 @@
 
     
 </script>
+<script src="projet.js"></script>
 
 </body>
 </html>

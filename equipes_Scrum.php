@@ -43,9 +43,9 @@
         <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">Ajouter équipe</button>
         <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">supprimer équipe</button>
         <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">Modifier équipe</button>
-        <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">Ajouter membre</button>
-        <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">Ajouter équipe</button>
-        <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">affecter équipe</button>
+
+        
+        
 </body> 
 </html>
                       

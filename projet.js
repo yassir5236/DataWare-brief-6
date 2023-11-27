@@ -7,3 +7,4 @@ function creerProjet() {
 function afficherDetailsProjet(idProjet) {
     alert("Fonction d'affichage des détails du projet avec l'ID " + idProjet + " à implémenter!");
 }
+

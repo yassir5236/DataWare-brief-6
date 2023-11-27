@@ -17,29 +17,67 @@
         
 
         <!-- Section de liste des équipes -->
-        <div>
-            <h2 class="text-xl font-semibold mb-4">Liste des Équipes</h2>
-            <ul>
-                <li class="mb-4">
-                    <div class="bg-gray-200 p-4 rounded-md">
-                        <h3 class="text-lg font-semibold">Équipe A</h3>
-                        
-                    </div>
-                </li>
-                <li class="mb-4">
-                    <div class="bg-gray-200 p-4 rounded-md">
-                        <h3 class="text-lg font-semibold">Équipe B</h3>
+       <!-- Contenu principal -->
+       <div class="container mx-auto mt-8 p-8 shadow-md rounded-md">
 
-                        <li class="mb-4">
-                    <div class="bg-gray-200 p-4 rounded-md">
-                        <h3 class="text-lg font-semibold">Équipe B</h3>
 
-                        <li class="mb-4">
-                    <div class="bg-gray-200 p-4 rounded-md">
-                        <h3 class="text-lg font-semibold">Équipe B</h3>
-                </li>
-            </ul>
-        </div>
+       <div>
+     <h2 class="text-xl text-black text-2xl font-semibold mb-4">Liste des Équipes</h2>
+    
+        <?php
+        // Connexion à la base de données
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "datawareX";
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        // Vérifier la connexion
+        if ($conn->connect_error) {
+            die("La connexion a échoué : " . $conn->connect_error);
+        }
+
+        // Requête SQL pour récupérer les équipes et leurs membres
+        $sql = "SELECT date_creation as Date_creation ,equipe.nom as equipe_nom, utilisateur.nom as membre_nom FROM equipe 
+                JOIN membreequipe ON equipe.id = membreequipe.id_equipe
+                JOIN utilisateur ON membreequipe.id_user = utilisateur.id";
+        $result = $conn->query($sql);
+
+      // Afficher les résultats
+while ($row = $result->fetch_assoc()) {
+    echo '<li class="mb-4">';
+    echo '<div class="bg-blue-200 p-4 rounded-md">';
+    echo '<h3 class="text-lg font-semibold text-blue-800">' . $row['equipe_nom'] . '</h3>';
+    echo '<p class="text-gray-700">Membre : ' . $row['membre_nom'] . '</p>';
+    echo '<p class="text-gray-700">Date de création : ' . $row['Date_creation'] . '</p>';
+    echo '</div>';
+    echo '</li>';
+}
+
+
+        // Fermer la connexion à la base de données
+        $conn->close();
+        ?>
+    </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="bg-white">
     <div class="max-w-7xl mx-auto py-12 px-4 text-center sm:px-6 lg:px-8 lg:py-24">
