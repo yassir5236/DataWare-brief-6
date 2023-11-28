@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans flex flex-col min-h-screen  opacity-100" style="background-image: url('back.jpg'); background-size: cover; background-position: center;">
+<body class="bg-gray-100 font-sans flex flex-col min-h-screen  opacity-100" style="background-image: url('back6.jpg'); background-size: cover; background-position: center;">
 <!-- Navbar -->
 
 <nav class="bg-blue-500 p-2 text-white mb-10">
@@ -22,7 +22,7 @@
 
 
 <!-- Main Container -->
-<div class="flex flex-1">
+<div class="flex flex-1 ">
 
     <!-- Main Sidebar -->
     <div class="bg-gradient-to-b from-indigo-800 to-indigo-600 text-white w-64 flex-shrink-0 h-screen">
@@ -66,6 +66,60 @@
     </div>
 
  
+
+    <script>
+    function toggleProjectForm() {
+        var projectForm = document.getElementById('projectForm');
+        projectForm.style.display = (projectForm.style.display === 'none' || projectForm.style.display === '') ? 'block' : 'none';
+    }
+    </script>
+
+
+
+
+<?php
+include("connection.php");
+
+if(isset($_POST['submitproject'])) {
+    $nom = $_POST['nom'];
+    $description = $_POST['text'];
+    $date_limite = $_POST['date_limite'];
+    $statut = $_POST['statut'];
+
+    // Check if the Scrum_master field is set
+    $scrum_master = isset($_POST['Scrum_master']) ? $_POST['Scrum_master'] : null;
+
+    // Vérifier si les champs obligatoires sont remplis
+    // if(empty($nom) || empty($description) || empty($date_limite) || empty($statut) || empty($scrum_master)) {
+    //     echo "Veuillez remplir tous les champs.";
+    // } else {
+        // Insertion des données dans la table projet
+        $stmt = $conn->prepare('INSERT INTO projet (nom, description, date_limite, statut, id_user) VALUES (?, ?, ?, ?, ?)');
+        $stmt->execute([$nom, $description, $date_limite, $statut, $scrum_master]);
+      
+
+
+       
+        // Vous pouvez également effectuer d'autres actions ici, si nécessaire
+
+        
+    }
+// }
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     <script>
