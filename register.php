@@ -1,38 +1,21 @@
 <?php
 include("connection.php");
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $nom = $_POST['First_name'];
-    $prenom=$_POST['Last_name'];
     $email = $_POST['email'];
     $motDePasse = $_POST['password'];
-  
 
     if ($motDePasse) {
-        
         $motDePasseHash = password_hash($motDePasse, PASSWORD_DEFAULT);
-
-        // $requete = $conn->prepare("INSERT INTO utilisateur (nom, email, password,statut,role) VALUES (?, ?, ?,'actif','user')");
-        // if (!$requete) {
-        //     die("Erreur de préparation de la requête : " . $conn->error);
-        // }
 
         $requete = $conn->prepare("INSERT INTO utilisateur (nom, email, password, statut, role) VALUES (?, ?, ?,'actif','Membre')");
 
         if (!$requete) {
-            die("Erreur de préparation de la requête : " . $conn->errorInfo()[2]);
+            die("Erreur de préparation de la requête : " . $conn->error);
         }
 
-        $requete->bindParam(1, $nom, PDO::PARAM_STR);
-        $requete->bindParam(2, $email, PDO::PARAM_STR);
-        $requete->bindParam(3, $motDePasseHash, PDO::PARAM_STR);
-
-        
-        // $requete->bind_param("sss", $nom, $email, $motDePasseHash);
-
-        $requete->bindParam(1, $nom, PDO::PARAM_STR);
-        $requete->bindParam(2, $email, PDO::PARAM_STR);
-        $requete->bindParam(3, $motDePasseHash, PDO::PARAM_STR);
-
+        $requete->bind_param("sss", $nom, $email, $motDePasseHash);
 
         if ($requete->execute()) {
             echo "Inscription réussie !";
@@ -44,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         $requete->close();
     }
 }
-
 ?>
+
 
 
 
@@ -86,22 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                  
                 
                     <div class="flex -mx-3">
-                        <div class="w-1/2 px-3 mb-5">
-                            <label for="" class="text-xs font-semibold px-1">First name</label>
+                        <div class="w-full px-3 mb-5">
+                            <label for="" class="text-xs font-semibold px-1">name</label>
                             <div class="flex">
                                 <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
                                 <input type="text" name="First_name" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="First name" id="nom">
                             </div>
-
-                        
                     
-                        </div>
-                        <div class="w-1/2 px-3 mb-5">
-                            <label for="" class="text-xs font-semibold px-1">Last name</label>
-                            <div class="flex">
-                                <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
-                                <input type="text"  name="Last_name" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="Last name">
-                            </div>
                         </div>
                     </div>
 

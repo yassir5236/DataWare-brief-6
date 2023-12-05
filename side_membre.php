@@ -1,3 +1,9 @@
+<?php 
+session_start();
+if(!isset($_SESSION['id'])){
+    header("Location:logout.php ");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +22,10 @@
 <nav class="bg-blue-500 p-2 text-white mb-10">
     <div class="container mx-auto flex justify-between items-center">
         <span class="text-xl font-bold">DataWare </span>
-        <button onclick="logout()" class="ml-auto px-4 py-2 bg-blue-700 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Déconnexion</button>
-    </div>
+        <a href="logout.php">
+                <button class="ml-auto px-4 py-2 bg-blue-700 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Déconnexion</button>
+                </a>
+                </div>
 </nav>
 
 

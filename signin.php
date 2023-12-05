@@ -1,116 +1,43 @@
 <?php
-session_start();
-
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "datawareX";
-
-// Créer une connexion PDO
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
+include("connection.php");
 
 if (isset($_POST['submit'])) {
-    // Récupérer les informations d'identification du formulaire
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Préparer la requête SQL pour vérifier les informations d'identification
-  
-   
-
-
-	$stmt = $conn->prepare("SELECT * FROM utilisateur WHERE email = :email");
-$stmt->bindParam(':email', $email);
-
-// Execute the query
-$stmt->execute();
-
-// Check for errors
-if ($stmt->errorCode() != 0) {
-    die("Query error: " . implode(", ", $stmt->errorInfo()));
-}
-
-// Fetch the user from the database
-if ($stmt->rowCount() > 0) {
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (password_verify($password, $user['password'])) {
-        // Authentication successful
-
-		session_start(); 
-
-
-		$_SESSION['id'] = $user['id'];
-    
-	    // Rediriger l'utilisateur vers la page appropriée
-
-        if ($user['role'] == 'Membre') {
-            header('Location: side_membre.php');
-        } else if ($user['role'] == 'Manager'){
-            header('Location: side_productOwner.php');
-			
-        }else  {
-            header('Location: side_scrumMster.php');
-		}
-    } else {
-        // Incorrect password
-        $login_error = 'Identifiants incorrects. Veuillez réessayer.';
+    $requete = $conn->prepare("SELECT * FROM utilisateur WHERE email = ?");
+    if (!$requete) {
+        die("Erreur de préparation de la requête : " . $conn->error);
     }
-} else {
-    // User not found
-    $login_error = 'Identifiants incorrects. Veuillez réessayer.';
-}
+    
+    $requete->bind_param("s", $email);
+    $requete->execute();
+    $resultat = $requete->get_result();
 
+    if ($resultat->num_rows == 1) {
+        $utilisateur = $resultat->fetch_assoc();
 
+        if (password_verify($password, $utilisateur['password'])) {
+            session_start();
+            $_SESSION['id'] =  $utilisateur['id'];
 
+			if ($utilisateur['role'] == 'Membre') {
+				header('Location: side_membre.php');
+			} else if ($utilisateur['role'] == 'Manager'){
+				header('Location: side_productOwner.php');
+				
+			}else  {
+				header('Location: side_scrumMster.php');
+			}
+			
+        } else {
+            echo "Mot de passe incorrect.";
+        }
+    } else {
+        echo "Aucun utilisateur trouvé avec cet email.";
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // // Vérifier si l'utilisateur existe dans la base de données
-    // if ($stmt->rowCount() > 0) {
-    //     // L'utilisateur est authentifié
-    //     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //     // Stocker les informations de l'utilisateur dans la session
-    //     $_SESSION['user_id'] = $user['id'];
-    //     $_SESSION['user_email'] = $user['email'];
-    //     $_SESSION['user_role'] = $user['role'];
-
-    //     // Rediriger l'utilisateur vers la page appropriée
-    //     if ($user['role'] == 'Membre') {
-    //         header('Location: side_membre.php');
-    //     } else if ($user['role'] == 'Manager'){
-    //         header('Location: side_productOwner.php');
-	// 		;
-    //     }else  {
-    //         header('Location: side_scrumMster.php');
-	// 	}
-    //     exit();
-    // } else {
-    //     // Informations d'identification incorrectes
-    //     $login_error = 'Identifiants incorrects. Veuillez réessayer.';
-    // }
+    $requete->close();
 }
 ?>
 

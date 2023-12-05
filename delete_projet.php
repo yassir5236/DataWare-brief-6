@@ -6,19 +6,24 @@ if (isset($_GET['id'])) {
 
     
         // Delete members
-        $deleteEquipeMembreQuery = $conn->prepare("DELETE FROM MembreEquipe WHERE id_equipe IN (SELECT id FROM equipe WHERE id_projet = :projectId)");
-        $deleteEquipeMembreQuery->bindParam(':projectId', $projectId);
+        $deleteEquipeMembreQuery = $conn->prepare("DELETE FROM MembreEquipe WHERE id_equipe IN (SELECT id FROM equipe WHERE id_projet = ?)");
+        $deleteEquipeMembreQuery->bind_param('i', $projectId);
         $deleteEquipeMembreQuery->execute();
-
-        // Perform the deletion query for equipe records first
-        $deleteEquipeQuery = $conn->prepare("DELETE FROM equipe WHERE id_projet = :projectId");
-        $deleteEquipeQuery->bindParam(':projectId', $projectId);
+        
+        // Perform the deletion query for equipe records
+        $deleteEquipeQuery = $conn->prepare("DELETE FROM equipe WHERE id_projet = ?");
+        $deleteEquipeQuery->bind_param('i', $projectId);
         $deleteEquipeQuery->execute();
-
-        // Then, delete the projet record
-        $deleteQuery = $conn->prepare("DELETE FROM projet WHERE id = :projectId");
-        $deleteQuery->bindParam(':projectId', $projectId);
+        
+        // Perform the deletion query for projet record
+        $deleteQuery = $conn->prepare("DELETE FROM projet WHERE id = ?");
+        $deleteQuery->bind_param('i', $projectId);
         $deleteQuery->execute();
+        
+        // Close the prepared statements
+        $deleteEquipeMembreQuery->close();
+        $deleteEquipeQuery->close();
+        $deleteQuery->close();
 
 
     // Redirect back to the main page after deletion
@@ -26,12 +31,3 @@ if (isset($_GET['id'])) {
     exit();
 }
 ?>
-
-
-
-
-
-
-
-
-

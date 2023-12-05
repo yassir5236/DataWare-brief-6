@@ -25,18 +25,7 @@
      <h2 class="text-xl text-black text-2xl font-semibold mb-4">Liste des Équipes</h2>
     
         <?php
-        // Connexion à la base de données
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "datawareX";
-
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Vérifier la connexion
-        if ($conn->connect_error) {
-            die("La connexion a échoué : " . $conn->connect_error);
-        }
+include("connection.php");
 
         // Requête SQL pour récupérer les équipes et leurs membres
         $sql = "SELECT date_creation as Date_creation ,equipe.nom as equipe_nom, utilisateur.nom as membre_nom FROM equipe 
@@ -55,9 +44,6 @@ while ($row = $result->fetch_assoc()) {
     echo '</li>';
 }
 
-
-        // Fermer la connexion à la base de données
-        $conn->close();
         ?>
     </ul>
 </div>
@@ -79,7 +65,7 @@ while ($row = $result->fetch_assoc()) {
 
 
 
-        <div class="bg-white">
+        <!-- <div class="bg-white">
     <div class="max-w-7xl mx-auto py-12 px-4 text-center sm:px-6 lg:px-8 lg:py-24">
       <div class="space-y-12">
         <div class="space-y-5 sm:mx-auto sm:max-w-xl sm:space-y-4 lg:max-w-5xl">
@@ -271,8 +257,8 @@ while ($row = $result->fetch_assoc()) {
         </ul>
       </div>
     </div>
-  </div>
-        <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">Affecter Scrum Master</button>
+  </div> -->
+        <!-- <button onclick="creerProjet()" class="mt-8 bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:shadow-outline-green">Affecter Scrum Master</button> -->
 </body> 
 </html>
                       

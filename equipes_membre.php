@@ -27,29 +27,24 @@
  
     
 
-
-
 <?php
+include("connection.php");
 session_start();
 
-// Connexion à la base de données
-$pdo = new PDO('mysql:host=localhost;dbname=datawareX', 'root', '');
 
 // Récupération des informations du membre
-$id_utilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : null; // Check if the session variable is set
-if ($id_utilisateur === null) {
-    echo 'User ID not found in session.';
-    exit; // Exit the script if the user ID is not set
-}
+$id_utilisateur = $_SESSION['id']; // Check if the session variable is set
 
 $sql = 'SELECT e.nom AS nom_equipe, e.date_creation AS date_creation_equipe, e.id_user AS id_scrum_master
         FROM equipe e
         JOIN membreequipe m ON m.id_equipe = e.id
-        WHERE m.id_user = :id_utilisateur AND m.id_equipe IS NOT NULL'; // Fix the column name to id_user
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':id_utilisateur', $id_utilisateur);
-$stmt->execute();
+        WHERE m.id_user = ? AND m.id_equipe IS NOT NULL'; // Fix the column name to id_user
 
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $id_utilisateur);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($nom_equipe, $date_creation_equipe, $id_scrum_master);
 
 // Affichage des informations de l'équipe dans un tableau
 echo '<div class="max-w-2xl mx-auto mt-8">';
@@ -64,84 +59,22 @@ echo '</thead>';
 echo '<tbody>';
 
 // Utiliser une boucle while pour itérer sur les résultats
-while ($resultat = $stmt->fetch(PDO::FETCH_ASSOC)) {
+while ($stmt->fetch()) {
     echo '<tr>';
-    echo '<td class="py-2 px-4 border-b">' . htmlspecialchars($resultat['nom_equipe']) . '</td>';
-    echo '<td class="py-2 px-4 border-b">' . htmlspecialchars($resultat['date_creation_equipe']) . '</td>';
-    echo '<td class="py-2 px-4 border-b">' . htmlspecialchars($resultat['id_scrum_master']) . '</td>';
+    echo '<td class="py-2 px-4 border-b">' . htmlspecialchars($nom_equipe) . '</td>';
+    echo '<td class="py-2 px-4 border-b">' . htmlspecialchars($date_creation_equipe) . '</td>';
+    echo '<td class="py-2 px-4 border-b">' . htmlspecialchars($id_scrum_master) . '</td>';
     echo '</tr>';
 }
 
 echo '</tbody>';
 echo '</table>';
 echo '</div>';
+
+$stmt->close();
 ?>
 
 
-
-
-
-
-
-<!-- <?php
-
-
-
-
-
-
-
-
-
-// Supposons que vous avez déjà récupéré les informations de connexion du formulaire
-$email = $_POST['email'];
-$password = $_POST['password'];
-
-// Vérification des informations d'identification
-$query = "SELECT id, nom, email, role FROM utilisateur WHERE email = :email AND password = :password";
-$stmt = $connexion->prepare($query);
-$stmt->bindParam(':email', $email);
-$stmt->bindParam(':password', $password);
-$stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if ($user) {
-    // Utilisateur authentifié
-    echo "Bienvenue " . $user['nom'] . "!";
-
-    // Récupérer les informations de l'équipe
-    $query = "SELECT equipe.nom as nom_equipe, equipe.date_creation as date_creation_equipe, utilisateur.nom as scrum_master
-              FROM MembreEquipe
-              JOIN equipe ON MembreEquipe.id_equipe = equipe.id
-              JOIN utilisateur ON equipe.id_user = utilisateur.id
-              WHERE MembreEquipe.id_user = :user_id";
-    $stmt = $connexion->prepare($query);
-    $stmt->bindParam(':user_id', $user['id']);
-    $stmt->execute();
-    $equipeDetails = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Afficher les détails de l'équipe dans un tableau
-    echo "<table border='1'>
-            <tr>
-                <th>Nom de l'équipe</th>
-                <th>Date de création de l'équipe</th>
-                <th>Scrum Master</th>
-            </tr>
-            <tr>
-                <td>" . $equipeDetails['nom_equipe'] . "</td>
-                <td>" . $equipeDetails['date_creation_equipe'] . "</td>
-                <td>" . $equipeDetails['scrum_master'] . "</td>
-            </tr>
-          </table>";
-
-} else {
-    // Identifiants incorrects
-    echo "Identifiants incorrects.";
-}
-
-// Fermer la connexion
-$connexion = null;
-?> -->
 
     
 </div>
